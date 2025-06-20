@@ -395,4 +395,39 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+import { PostgresStorage } from "./postgres-storage";
+import { seedDatabase } from "./seed-database";
+
+// Initialize PostgreSQL storage and seed database if using PostgreSQL
+const createStorage = async () => {
+  if (process.env.DATABASE_URL) {
+    const storage = new PostgresStorage();
+    // Seed database on startup if empty
+    try {
+      const modules = await storage.getModules();
+      if (modules.length === 0) {
+        await seedDatabase();
+      }
+    } catch (error) {
+      console.error("Error checking/seeding database:", error);
+    }
+    return storage;
+  }
+  return new MemStorage();
+};
+
+export const storage = process.env.DATABASE_URL ? new PostgresStorage() : new MemStorage();
+
+// Seed database on startup for PostgreSQL
+if (process.env.DATABASE_URL) {
+  setTimeout(async () => {
+    try {
+      const modules = await storage.getModules();
+      if (modules.length === 0) {
+        await seedDatabase();
+      }
+    } catch (error) {
+      console.error("Error seeding database:", error);
+    }
+  }, 1000);
+}

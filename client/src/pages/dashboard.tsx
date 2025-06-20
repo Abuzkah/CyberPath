@@ -7,6 +7,7 @@ import ProjectTracker from "@/components/projects/project-tracker";
 import MarkdownEditor from "@/components/blog/markdown-editor";
 import GitHubSync from "@/components/github/github-sync";
 import CyberLabSync from "@/components/lab/cyber-lab-sync";
+import AISuggestions from "@/components/ai/ai-suggestions";
 import { useQuery } from "@tanstack/react-query";
 import { useProgress } from "@/hooks/use-progress";
 import { type Module, type Achievement, type UserAchievement } from "@shared/schema";
@@ -28,11 +29,11 @@ export default function Dashboard() {
     queryKey: [`/api/achievements/${CURRENT_USER_ID}`],
   });
 
-  const { data: projects = [] } = useQuery({
+  const { data: projects = [] } = useQuery<any[]>({
     queryKey: [`/api/projects/${CURRENT_USER_ID}`],
   });
 
-  const { data: blogPosts = [] } = useQuery({
+  const { data: blogPosts = [] } = useQuery<any[]>({
     queryKey: [`/api/blog/${CURRENT_USER_ID}`],
   });
 
@@ -56,6 +57,11 @@ export default function Dashboard() {
                   isUnlocked={isModuleUnlocked(module)}
                 />
               ))}
+            </div>
+
+            {/* AI Suggestions */}
+            <div className="mb-8">
+              <AISuggestions />
             </div>
 
             {/* Achievement Badges */}
@@ -136,7 +142,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white matrix-bg">
       <Header />
       <div className="flex h-screen pt-16">
         <Sidebar

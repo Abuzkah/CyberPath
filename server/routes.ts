@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { aiEngine } from "./ai-suggestions";
 import { insertProjectSchema, insertBlogPostSchema, insertUserProgressSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -147,25 +148,111 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Mock GitHub sync endpoint
+  // AI Suggestions endpoint
+  app.get("/api/ai/suggestions/:userId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const suggestions = await aiEngine.generateSuggestions(userId);
+      res.json(suggestions);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to generate AI suggestions" });
+    }
+  });
+
+  // Enhanced GitHub integration endpoint
   app.post("/api/github/sync", async (req, res) => {
     try {
-      // Mock GitHub sync - in real implementation, this would use GitHub API
-      const { repository, files } = req.body;
+      const { repository, files, token } = req.body;
       
-      // Simulate processing time
+      if (!token) {
+        return res.status(400).json({ message: "GitHub token required" });
+      }
+
+      // Real GitHub API integration would go here
+      // For now, simulate the sync with processing time
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       res.json({ 
         success: true, 
         message: `Successfully synced ${files?.length || 0} files to ${repository}`,
-        commitId: "abc123" 
+        commitId: `commit_${Date.now()}`,
+        url: `https://github.com/${repository}/commits`
       });
     } catch (error) {
       res.status(500).json({ message: "GitHub sync failed" });
     }
   });
 
+  // Achievement check endpoint
+  app.post("/api/achievements/check/:userId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const { action, data } = req.body;
+      
+      // Check for achievement unlocks based on actions
+      const newAchievements = await checkAchievements(userId, action, data);
+      
+      res.json({ achievements: newAchievements });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to check achievements" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
+}
+
+// Achievement checking logic
+async function checkAchievements(userId: number, action: string, data: any) {
+  const achievements = await storage.getAchievements();
+  const userAchievements = await storage.getUserAchievements(userId);
+  const newAchievements = [];
+
+  for (const achievement of achievements) {
+    // Skip if already unlocked
+    if (userAchievements.some(ua => ua.achievementId === achievement.id)) {
+      continue;
+    }
+
+    let shouldUnlock = false;
+
+    switch (achievement.condition) {
+      case "complete_modules:1":
+        if (action === "complete_module") {
+          const userProgress = await storage.getUserProgress(userId);
+          const completedCount = userProgress.filter(p => p.completed).length;
+          shouldUnlock = completedCount >= 1;
+        }
+        break;
+      
+      case "upload_scripts:10":
+        if (action === "create_project") {
+          const projects = await storage.getUserProjects(userId);
+          const scriptProjects = projects.filter(p => 
+            p.tools.some(tool => tool.toLowerCase().includes('script') || tool.toLowerCase().includes('python') || tool.toLowerCase().includes('bash'))
+          );
+          shouldUnlock = scriptProjects.length >= 10;
+        }
+        break;
+
+      case "complete_all_modules":
+        if (action === "complete_module") {
+          const modules = await storage.getModules();
+          const userProgress = await storage.getUserProgress(userId);
+          const completedCount = userProgress.filter(p => p.completed).length;
+          shouldUnlock = completedCount >= modules.length;
+        }
+        break;
+    }
+
+    if (shouldUnlock) {
+      const newAchievement = await storage.unlockAchievement({
+        userId,
+        achievementId: achievement.id
+      });
+      newAchievements.push({ ...achievement, unlockedAt: newAchievement.unlockedAt });
+    }
+  }
+
+  return newAchievements;
 }

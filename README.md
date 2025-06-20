@@ -27,7 +27,7 @@
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/cyberpath.git
+   git clone https://github.com/Abuzkah/cyberpath.git
    cd cyberpath
    ```
 
@@ -47,10 +47,6 @@
 ## 📚 Project Vision
 
 CyberPath was built to turn ethical hacking education into a hands-on journey. It’s designed to mirror real CTF workflows and lab experiences—while encouraging documentation, project builds, and knowledge sharing.
-
-## 🧠 Powered by Kali GPT
-
-This app was architected and refined with the help of **Kali GPT**, your AI mentor in offensive security.
 
 ---
 

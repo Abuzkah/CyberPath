@@ -1,0 +1,109 @@
+Build me a full-stack web application named CyberPath that helps users learn cybersecurity through a tailored roadmap and project-based learning. The app should:
+
+🧩 Core Features:
+📌 Interactive Roadmap Dashboard
+
+Step-by-step guide covering topics like Recon, Web Hacking, Exploits, AD Attacks, Bluetooth, and CTFs.
+
+Track completion progress with a visual progress bar or badges.
+
+🛠️ Hands-On Project Tracker
+
+Let users log each project (title, description, tools used, result).
+
+Allow uploading scripts, screenshots, or flags.
+
+Each project should be downloadable or shareable.
+
+🧾 Integrated Markdown Blog
+
+Users can write walkthroughs, reports, and thoughts in Markdown.
+
+Preview, edit, and save blog posts.
+
+🚀 GitHub Integration
+
+With user permission, allow uploading:
+
+Notes (.md)
+
+Scripts (.sh, .py, .txt)
+
+Walkthroughs and reports
+
+Authenticate via GitHub and auto-push content to a designated repo.
+
+🧠 AI Assistant Sidebar (Mocked or Integrated)
+
+Teach tips for each topic
+
+Give challenges
+
+Recommend tools
+
+🔐 Secure User Login (Optional)
+
+Use Supabase, Firebase Auth, or a simple JWT system (if needed)
+
+🧰 Tech Stack:
+Frontend: React.js (with Tailwind CSS or Chakra UI)
+
+Backend: Node.js / Express / Supabase or Firebase
+
+Markdown Editor: Simple React markdown editor
+
+GitHub API for pushes (use Octokit or equivalent)
+
+Persistent local storage for progress
+
+🆓 Deployment:
+Ensure the app is deployable freely using Replit's free tier or Vercel/Netlify.
+
+📦 Bonus Ideas (Optional but awesome):
+Weekly “quests” or challenges (CTF-style)
+
+Code snippet library with my favorite scripts
+
+JSON export of my training journal
+
+Theme toggles and terminal-style UI
+
+💡 Suggestions from Kali GPT:
+Default roadmap can mirror the modules from our hacking-trainer.sh script
+
+The blog section can parse .md exported from your terminal notetaker
+
+Add a page called "Cyber Lab Sync" where you upload your exported ZIP or walkthroughs and the site organizes it visually
+
+Let me know if you’d like me to help design the UI or generate the actual React components or GitHub workflow too!
+
+
+
+
+
+
+You said:
+yes
+
+
+ChatGPT said:
+Cyber Path Ui React
+
+Answer in chat instead
+🚀 The CyberPath UI is now live in the editor. It's a sleek, interactive React app with:
+
+📍 A visual roadmap
+
+🛠 A project logger
+
+📝 A Markdown blog editor
+
+🚀 GitHub sync interface
+
+Would you like me to add:
+
+Firebase or Supabase for authentication/storage?
+
+Real GitHub OAuth push functionality?
+
+A dark/cyberpunk theme?

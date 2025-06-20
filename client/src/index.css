@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* Cyber theme colors */
+  --cyber-green: hsl(120, 100%, 50%);
+  --cyber-blue: hsl(208, 91%, 56%);
+  --cyber-cyan: hsl(179, 46%, 53%);
+  --cyber-red: hsl(0, 79%, 70%);
+  --cyber-yellow: hsl(48, 98%, 70%);
+  --terminal-bg: hsl(0, 0%, 4%);
+  --terminal-panel: hsl(0, 0%, 10%);
+  --terminal-border: hsl(0, 0%, 20%);
+}
+
+.dark {
+  --background: hsl(0, 0%, 4%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(0, 0%, 10%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(0, 0%, 4%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(0, 0%, 10%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(0, 0%, 20%);
+  --input: hsl(0, 0%, 20%);
+  --primary: hsl(208, 91%, 56%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(0, 0%, 10%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(0, 0%, 10%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-mono antialiased text-white;
+    background-color: hsl(0, 0%, 4%);
+    font-family: 'Fira Code', monospace;
+  }
+
+  html {
+    @apply dark;
+  }
+}
+
+@layer utilities {
+  .terminal-window {
+    background: linear-gradient(135deg, var(--terminal-panel) 0%, var(--terminal-bg) 100%);
+    border: 1px solid var(--terminal-border);
+  }
+
+  .cyber-border {
+    border: 1px solid var(--cyber-green);
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+  }
+
+  .progress-bar-glow {
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.6);
+  }
+
+  .glitch-text {
+    position: relative;
+    display: inline-block;
+  }
+
+  .glitch-text::before,
+  .glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .glitch-text:hover::before {
+    animation: glitch-anim-1 0.5s infinite;
+    color: #ff0000;
+    z-index: -1;
+    opacity: 0.8;
+  }
+
+  .glitch-text:hover::after {
+    animation: glitch-anim-2 0.5s infinite;
+    color: #00ffff;
+    z-index: -2;
+    opacity: 0.8;
+  }
+
+  @keyframes glitch-anim-1 {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(-1px, 1px); }
+    40% { transform: translate(-1px, -1px); }
+    60% { transform: translate(1px, 1px); }
+    80% { transform: translate(1px, -1px); }
+  }
+
+  @keyframes glitch-anim-2 {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(1px, 1px); }
+    40% { transform: translate(1px, -1px); }
+    60% { transform: translate(-1px, 1px); }
+    80% { transform: translate(-1px, -1px); }
+  }
+
+  @keyframes terminal-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  .animate-terminal-blink {
+    animation: terminal-blink 1s step-end infinite;
+  }
+
+  @keyframes glow {
+    0% { box-shadow: 0 0 5px var(--cyber-green); }
+    100% { box-shadow: 0 0 20px var(--cyber-green), 0 0 30px var(--cyber-green); }
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--terminal-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--terminal-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cyber-green);
+}
